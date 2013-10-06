@@ -1,0 +1,31 @@
+		SQL Injection
+		--------------
+SQL Injection is one of the more popular application layer hacking techniques that is used in the wild today. It is a trick that exploits poorly filtered or not correctly escaped SQL queries into parsing variable data from user input. The idea behind SQL injection is to convince the SQL application (whether MySQL, MSSQL, PostgreSQL, ORACLE etc) to run an SQL string that was not premeditated.
+There are a number of categorized SQL injection types that can be executed with a web-browser. They are:
+1- Poorly Filtered Strings
+2- Incorrect Type Handling
+3- Signature Evasion
+4- Filter Bypassing
+5- Blind SQL Injection
+---------------------------------------------------------------
+Poorly Filtered Strings
+--
+SQL injections based on poorly filtered strings are caused by user input that is not filtered for escape characters. This means that a user can input a variable that can be passed on as an SQL statement, resulting in database input manipulation by the end user.
+Code that is vulnerable to this type of vulnerability might look something like this:
+$pass = $_GET['pass'];
+$password = mysql_query("SELECT password FROM users WHERE password = '". $pass . "';");
+
+The query above is an SQL call to SELECT the password from the users database, with the password value being that of $var. If the user were to input a password that was especially designed to continue the SQL call, it may result in results that were not aforethought. An injection for this may look something like:
+' OR 1 = 1 /*
+
+Inserting the above into the form will result in the query being extended with an OR statement, resulting in a final query of:
+SELECT password FROM users WHERE password = '' OR 1 = 1 /*
+Because of the OR statement in the SQL query, the check for password = $var is insignificant as 1 does equal 1, thus the query will return TRUE, resulting in a positive login.
+--------------------------------------------------------------
+Incorrect Type Handling
+--
+Incorrect type handling based SQL injections occur when an input is not checked for type constraints. An example of this would be an ID field that is numeric, but there is no filtering in place to check that the user input is numeric. is_numeric() should always be used when the field type is explicitly supposed to be a number. An example of code that will not be subject to incorrect type handling injection is:
+(is_numeric($_GET['id'])) ? $id = $_GET['id'] : $id = 1;
+$news = mysql_query( "SELECT * FROM `news` WHERE `id` = $id ORDER BY `id` DESC LIMIT 0,3" );
+The above code checks that $_GET['id'] is a number, if TRUE returns $id = $_GET['id'], and if FALSE sets $id to 1. This kind of filtering will assure that the ID field is always numeric.
+

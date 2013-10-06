@@ -1,0 +1,17 @@
+Description
+
+CSRF attacks can allow an attacker to hijack a victim account, which may result in malicious requests being forged under that account. Proper CSRF exploitation can logout a user, transfer money, change a password, modify information, make posts, change user status; all of which is performed from within the victim account.
+Not only is a CSRF attack relatively simple to achieve, but it can be very difficult to detect the attack itself. This is due to the fact that the attacks appear to be performed by a legitimate user.
+[edit]Severity
+
+Moderate
+[edit]Exploit Likeliness
+
+Very High
+[edit]How-To/Information
+
+There are a number of techniques that can be used to perform a CSRF attack. The most common forms of attack are: XSS, IMG tags and Social Engineering.
+The XSS method of attack is often simpler provided that an XSS flaw has been found within the target website.
+Social Engineering can be harder to achieve as it is essential to gain the victims trust, and create a separate page to exploit the vulnerability.
+[edit]The XSS Method
+The basic premise of this method is to inject JavaScript into the target site, and execute a query as the victim user. This method is—of course—reliant on an XSS hole existing within the website, and can be used to (for example) promote a user to administrative status.

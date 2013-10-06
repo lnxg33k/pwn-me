@@ -1,0 +1,30 @@
+XSS (Cross-Site Scripting), is a type of vulnerability which allows for client-side JavaScript execution. This type of vulnerability can pose a massive security risk if exploited in the correct manner, and has many different uses for attackers. In this paper we will discuss how XSS can be used to steal cookies and other information that can be used in different scenarios. All the examples used have been created solely for the purpose of this paper, to assist you in learning how this vulnerability works.
+XSS vulnerabilities are made possible by the coder of the web application or script in question not sanitising the user input correctly and printing out the injected JavaScript straight to the page. We will discuss this in more detail later on in the paper, but here is a basic scenario :>
+1- We find a blog which allows users user to input data.
+2- This data is displayed, unedited or sanitised on the blog index page.
+3- We want to inject a XSS to log the administrative users cookies.
+4- We want to login with the cookie we have stolen.
+
+What You Will Need
+
+Before we start, there are a few things you will need in order to follow the paper efficiently, I have set a list below of what you will need with the required links. I have included a BASIC vulnerable script for you to play with, if you ever see someone using this script for anything other than this, then they deserve to be shot.
+Heres a list of things you will need through-out the tutorial :>
+Mozilla Firefox. [1]
+FF addon : Add & Edit Cookies. [2]
+FF addon : Live HTTP Headers. [3]
+An ACTIVE cookie logger. Refer to 'scripts' at the end of this tutorial for a logger script.
+A basic understanding of JavaScript is an advantage, but not essential. [4]
+A XSS vulnerability to test and exploit. Refer to 'scripts' at the end of this tutorial for an example of a vulnerable script. Hosting is up to you, try this free PHP web host :> [5]
+The desire and dedication to learn. [Yourself.]
+
+Identifying & Exploiting the Vulnerability
+
+Identifying a XSS vulnerability can be pretty straight forward in most circumstances, we will talk about possible filters and bypassing them in the next section. A typical method of testing for a XSS vulnerability would be infamous 'Alert' test. Anyone with a basic knowledge of JavaScript will know what this is. This test will make an alert box, or message box, pop up on the screen. This is done by executing the JavaScript function Alert().
+scr1pt>alert('XSS')</script>
+This would display a message box with XSS as the message.
+NOTE : There is an obvious way to filter this, but we will talk about that in the next section.
+To perform this test we want the page in question to print out the script, so the browser will execute it. So in this case using the included vulnerable test page, input the string <script>alert('XSS')</scr1pt>. Now the page will execute this and you should get an alert box displaying the message 'XSS'.
+With permanent vulnerability, these tests are not always a good idea, as they cannot be removed in most cases, and the owner of the site will clock it pretty quickly if he sees a message box pop up that's not supposed to be there. Another method of testing for vulnerability is the document.write method. The same concepts and structure is applied to this method as the alert method, we're just using the document.write function instead of the alert function. So this time we insert :
+scr1pt>document.write('XSS')</script>
+This time the script will return the string 'XSS', (without quotes), and will write it to the page, where the string is supposed to be shown.
+Assuming you've efficiently identified a exploitable XSS vulnerability, we need to think about the possible attack vectors and different usages of the XSS, and how we can manipulate it to get certain information. Here is a list of a few of the usages of XSS and a basic description on what they do :>

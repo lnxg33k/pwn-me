@@ -1,0 +1,29 @@
+Local File Inclusion (also known as LFI) is the process of including files on a server through the web browser. This vulnerability occurs when a page include is not properly sanitized, and allows directory traversal characters to be injected. A typical example of a PHP script vulnerable to LFI is as follows:
+   $file = $_GET['file'];
+   if(isset($file))
+   {
+       include("pages/$file");
+   }
+   else
+   {
+       include("index.php");
+   }
+A legitimate request made to the script could look like this:
+   http://example.com/index.php?file=contactus.php
+This is of little use to a potential attacker, who is more likely to be interested in the files outside the pages/ directory. To do this, an attacker could use LFI. The simplest example would be:
+   http://example.com/index.php?file=../../../../etc/passwd
+On a *nix system, this would show the hashes of all passwords on the server, which could later be cracked and used to get file access.
+[edit]Filter Evasion
+
+Most good admins will have protected against the simplest LFI attacks, so we should update the example script accordingly.
+   $file = str_replace('../', '', $_GET['file']);
+   if(isset($file))
+   {
+       include("pages/$file");
+   }
+   else
+   {
+       include("index.php");
+   }
+Now, our simple LFI attack will no longer work. Obviously, we don't want to be deterred by this, so we need to find a way for our directory traversal to work, while evading the filters. One way to do this is to encode one or more characters into hexadecimal. This works because the browser decodes the input, but PHP does not. Our new LFI would be:
+   http://example.com/index.php?file=..%2F..%2F..%2F..%2Fetc%2Fpasswd
